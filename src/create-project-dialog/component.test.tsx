@@ -1,4 +1,4 @@
-import { setupShallowTest } from '../tests/enzyme-util/shallow';
+import { setupMountTest } from '../tests/enzyme-util/mount';
 import { CreateProjectDialog } from './component';
 import { generateManifest } from '../util/generate-manifest';
 
@@ -28,7 +28,7 @@ jest.mock('../util/api', () => mockApiFunctions());
 const api = require.requireMock('../util/api');
 
 describe('<CreateProjectDialog />', () => {
-  const setupShallow = setupShallowTest(CreateProjectDialog, () => ({
+  const setupShallow = setupMountTest(CreateProjectDialog, () => ({
     userId: 'userId',
     closeHandler: jest.fn(),
     saveHandler: jest.fn()

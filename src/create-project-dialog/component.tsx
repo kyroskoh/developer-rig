@@ -7,6 +7,7 @@ import { RigProject } from '../core/models/rig';
 import { fetchUserExtensionManifest } from '../util/extension';
 import { generateManifest } from '../util/generate-manifest';
 import { ExtensionViewType } from '../constants/extension-coordinator';
+import { PropertyValue } from './property-value';
 
 interface Props {
   userId: string;
@@ -251,47 +252,26 @@ export class CreateProjectDialog extends React.Component<Props, State>{
               </label>
               <div className="project-dialog-property">
                 <div className="project-dialog-property__name">Choose Extension</div>
-                <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="radio" name="isLocal" value={1} checked={rigProject.isLocal} onChange={this.onChangeIsLocal} />
-                  <span className="project-dialog-property__right-text">Create Local Extension</span>
-                </label>
-                <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="radio" name="isLocal" value={0} checked={!rigProject.isLocal} onChange={this.onChangeIsLocal} />
-                  <span className="project-dialog-property__right-text">Use Already Created Online Extension</span>
-                </label>
+                <PropertyValue type="radio" name="isLocal" value={1} checked={rigProject.isLocal} onChange={this.onChangeIsLocal}
+                  text="Create Local Extension" />
+                <PropertyValue type="radio" name="isLocal" value={0} checked={!rigProject.isLocal} onChange={this.onChangeIsLocal}
+                  text="Use Already Created Online Extension" />
               </div>
               {rigProject.isLocal && <div className="project-dialog-property">
                 <div className={typesClassName}>Extension Types</div>
-                <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="checkbox" name="extensionTypes" value={ExtensionTypes.Overlay} checked={Boolean(extensionTypes & ExtensionTypes.Overlay)} onChange={this.onChange} />
-                  <span className="project-dialog-property__right-text">Video Overlay</span>
-                </label>
-                <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="checkbox" name="extensionTypes" value={ExtensionTypes.Panel} checked={Boolean(extensionTypes & ExtensionTypes.Panel)} onChange={this.onChange} />
-                  <span className="project-dialog-property__right-text">Panel</span>
-                </label>
-                <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="checkbox" name="extensionTypes" value={ExtensionTypes.Component} checked={Boolean(extensionTypes & ExtensionTypes.Component)} onChange={this.onChange} />
-                  <span className="project-dialog-property__right-text">Component</span>
-                </label>
-                <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="checkbox" name="extensionTypes" value={ExtensionTypes.Mobile} checked={Boolean(extensionTypes & ExtensionTypes.Mobile)} onChange={this.onChange} />
-                  <span className="project-dialog-property__right-text">Mobile</span>
-                </label>
+                <PropertyValue type="checkbox" name="extensionTypes" checked={Boolean(extensionTypes & ExtensionTypes.Overlay)} onChange={this.onChange}
+                  text="Video Overlay" value={ExtensionTypes.Overlay} />
+                <PropertyValue type="checkbox" name="extensionTypes" checked={Boolean(extensionTypes & ExtensionTypes.Panel)} onChange={this.onChange}
+                  text="Panel" value={ExtensionTypes.Panel} />
+                <PropertyValue type="checkbox" name="extensionTypes" checked={Boolean(extensionTypes & ExtensionTypes.Component)} onChange={this.onChange}
+                  text="Component" value={ExtensionTypes.Component} />
+                <PropertyValue type="checkbox" name="extensionTypes" checked={Boolean(extensionTypes & ExtensionTypes.Mobile)} onChange={this.onChange}
+                  text="Mobile" value={ExtensionTypes.Mobile} />
               </div>}
               {!rigProject.isLocal && <div className="project-dialog-property">
-                <label className="project-dialog-property__value project-dialog-property__value--grid">
-                  <span className="project-dialog-property__left-text project-dialog-property__left-text--grid">Client ID</span>
-                  <input className={clientIdClassName} type="text" name="clientId" value={this.state.clientId} onChange={this.onChange} />
-                </label>
-                <label className="project-dialog-property__value project-dialog-property__value--grid">
-                  <span className="project-dialog-property__left-text project-dialog-property__left-text--grid">Secret</span>
-                  <input className={secretClassName} type="text" name="secret" value={rigProject.secret} onChange={this.onChange} />
-                </label>
-                <label className="project-dialog-property__value project-dialog-property__value--grid">
-                  <span className="project-dialog-property__left-text project-dialog-property__left-text--grid">Version</span>
-                  <input className={versionClassName} type="text" name="version" value={this.state.version} onChange={this.onChange} />
-                </label>
+                <PropertyValue isGrid={true} text="Client ID" type={clientIdClassName} name="clientId" value={this.state.clientId} onChange={this.onChange} />
+                <PropertyValue isGrid={true} text="Secret" type={secretClassName} name="secret" value={rigProject.secret} onChange={this.onChange} />
+                <PropertyValue isGrid={true} text="Version" type={versionClassName} name="version" value={this.state.version} onChange={this.onChange} />
                 <button className="project-dialog-property__button" onClick={this.fetchExtensionManifest}>Fetch</button>
                 <textarea className={manifestClassName} value={JSON.stringify(rigProject.manifest)} disabled={true} />
               </div>}
@@ -301,18 +281,12 @@ export class CreateProjectDialog extends React.Component<Props, State>{
               </label>
               <div className="project-dialog-property">
                 <div className="project-dialog-property__name">Add Code to Project</div>
-                <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="radio" name="codeGenerationOption" value={CodeGenerationOption.None} checked={codeGenerationOption === CodeGenerationOption.None} onChange={this.onChange} />
-                  <span className="project-dialog-property__right-text">None (Only create project folder, if specified)</span>
-                </label>
-                {false && <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="radio" name="codeGenerationOption" value={CodeGenerationOption.Scaffolding} checked={codeGenerationOption === CodeGenerationOption.Scaffolding} onChange={this.onChange} />
-                  <span className="project-dialog-property__right-text">Generate Scaffolding</span>
-                </label>}
-                <label className="project-dialog-property__value">
-                  <input className="project-dialog-property__left-input" type="radio" name="codeGenerationOption" value={CodeGenerationOption.Example} checked={codeGenerationOption === CodeGenerationOption.Example} onChange={this.onChange} />
-                  <span className="project-dialog-property__right-text">Use Existing Example</span>
-                </label>
+                <PropertyValue type="radio" name="codeGenerationOption" checked={codeGenerationOption === CodeGenerationOption.None} onChange={this.onChange}
+                  text="None (Only create project folder, if specified)" value={CodeGenerationOption.None} />
+                {false && <PropertyValue type="radio" name="codeGenerationOption" checked={codeGenerationOption === CodeGenerationOption.Scaffolding} onChange={this.onChange}
+                  text="Generate Scaffolding" value={CodeGenerationOption.Scaffolding} />}
+                <PropertyValue type="radio" name="codeGenerationOption" checked={codeGenerationOption === CodeGenerationOption.Example} onChange={this.onChange}
+                  text="Use Existing Example" value={CodeGenerationOption.Example} />
               </div>
             </div>
             <div className="project-dialog__vertical-bar" />
@@ -321,14 +295,12 @@ export class CreateProjectDialog extends React.Component<Props, State>{
                 <>
                   <div className="project-dialog__section-header">Tell us more about what your extension will do</div>
                   <div className="project-dialog__section-text">(We’ll automatically provide basic React-based scaffolding, but we want to provide extras where useful!)</div>
-                  <label className="project-dialog-property">
-                    <input className="project-dialog-property__left-input" type="checkbox" name="scaffoldingOptions" value={ScaffoldingOptions.StoreConfiguration} checked={Boolean(this.state.scaffoldingOptions)} onChange={this.onChange} />
-                    <span className="project-dialog-property__right-text">Store Broadcaster Configuration</span>
-                  </label>
-                  <label className="project-dialog-property">
-                    <input className="project-dialog-property__left-input" type="checkbox" name="scaffoldingOptions" value={ScaffoldingOptions.RetrieveConfiguration} checked={Boolean(this.state.scaffoldingOptions & ScaffoldingOptions.RetrieveConfiguration)} onChange={this.onChange} />
-                    <span className="project-dialog-property__right-text">Retrieve Configuration on Load</span>
-                  </label>
+                  <div className="project-dialog__sub-section">
+                    <PropertyValue type="checkbox" name="scaffoldingOptions" value={ScaffoldingOptions.StoreConfiguration} checked={Boolean(this.state.scaffoldingOptions)} onChange={this.onChange}
+                      text="Store Broadcaster Configuration" />
+                    <PropertyValue type="checkbox" name="scaffoldingOptions" value={ScaffoldingOptions.RetrieveConfiguration} checked={Boolean(this.state.scaffoldingOptions & ScaffoldingOptions.RetrieveConfiguration)} onChange={this.onChange}
+                      text="Retrieve Configuration on Load" />
+                  </div>
                 </>
               ) : codeGenerationOption === CodeGenerationOption.Example ? (
                 <>
@@ -354,8 +326,8 @@ export class CreateProjectDialog extends React.Component<Props, State>{
                   </label>
                 </>
               ) : (
-                    <div className="project-dialog__section-header">You’re all set!  Good luck on your extension!</div>
-                  )}
+                <div className="project-dialog__section-header">You’re all set!  Good luck on your extension!</div>
+              )}
             </div>
           </div>
           <hr className="project-dialog__divider" />
